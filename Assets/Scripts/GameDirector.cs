@@ -3,8 +3,9 @@ using System.Collections;
 
 namespace Okky {
 	public class GameDirector : MonoBehaviour {
-		public float topScore = 0;
-		public float score = 0;
+		public float topScore = 0f;
+		public float score = 0f;
+		public float koban = 0f;
 
 		void Awake() {
 		}
@@ -13,6 +14,9 @@ namespace Okky {
 		}
 
 		void Update() {
+			if (!ExistKoban()) {
+				AreaClear ();
+			}
 		}
 
 		void ResetGame() {
@@ -32,6 +36,26 @@ namespace Okky {
 			if (score > topScore) {
 				topScore = score;
 			}
+		}
+
+		public float GetKoban() {
+			return koban;
+		}
+
+		void TakeKoban() {
+			koban++;
+		}
+
+		bool ExistKoban() {
+			var objs = GameObject.FindGameObjectsWithTag("Kobans");
+			if (objs .Length > 0) {
+				return true;
+			}
+			return false;
+		}
+
+		void AreaClear() {
+			ResetGame();
 		}
     }
 }

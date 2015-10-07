@@ -14,14 +14,14 @@ namespace Okky {
 		public float LimitXMin = -10000f;
 		public float LimitXMax = 10000f;
 
+		void Awake() {
+		}
+
 		void Start() {
 		}
 
-		void Update() {
-		}
-
 		public Vector3 Move() {
-			var dt = Time.deltaTime;
+ 			var dt = Time.deltaTime;
 			var p = transform.localPosition; 
 			var diffX = (vx * dt);
 			var diffY = (vy * dt);
@@ -51,13 +51,13 @@ namespace Okky {
 			vx = -v;
 		}
 
-		public void Top() {
+		public void Up() {
 			var dt = Time.deltaTime;
 			var v =  vi + a * dt;
 			vy = v;
 		}
 
-		public void Bottom() {
+		public void Down() {
 			var dt = Time.deltaTime;
 			var v =  vi + a * dt;
 			vy = -v;
