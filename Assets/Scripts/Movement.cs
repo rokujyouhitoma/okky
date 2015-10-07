@@ -22,7 +22,7 @@ namespace Okky {
 
 		public Vector3 Move() {
  			var dt = Time.deltaTime;
-			var p = transform.localPosition; 
+			var p = transform.position; 
 			var diffX = (vx * dt);
 			var diffY = (vy * dt);
 			var x = p.x + diffX;
@@ -35,7 +35,7 @@ namespace Okky {
 				x = LimitXMax;
 				diffX = x - p.x;
 			}
-			transform.localPosition = new Vector3(x, y, p.z);
+			transform.position = new Vector3(x, y, p.z);
 			return new Vector3(diffX, diffY, 0);
 		}
 

@@ -17,6 +17,9 @@ namespace Okky {
 			if (!ExistKoban()) {
 				AreaClear ();
 			}
+			if (!ExistNinja()) {
+				SendInNinja();
+			}
 		}
 
 		void ResetGame() {
@@ -47,7 +50,15 @@ namespace Okky {
 		}
 
 		bool ExistKoban() {
-			var objs = GameObject.FindGameObjectsWithTag("Kobans");
+			var objs = GameObject.FindGameObjectsWithTag("Koban");
+			if (objs .Length > 0) {
+				return true;
+			}
+			return false;
+		}
+
+		bool ExistNinja() {
+ 			var objs = GameObject.FindGameObjectsWithTag("Ninja");
 			if (objs .Length > 0) {
 				return true;
 			}
@@ -56,6 +67,10 @@ namespace Okky {
 
 		void AreaClear() {
 			ResetGame();
+		}
+
+		void SendInNinja() {
+			Debug.Log ("SendInNinja");
 		}
     }
 }

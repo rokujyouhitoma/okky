@@ -7,5 +7,7 @@ namespace Okky {
 		public KeyCode left;
 		public KeyCode up;
 		public KeyCode down;
+		public KeyCode B;
+		public KeyCode A;
 	}
 }

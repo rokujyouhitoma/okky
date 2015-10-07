@@ -4,11 +4,13 @@ using System.Collections;
 namespace Okky {
 	public class Player : MonoBehaviour {
 		Movement movement;
+		Equipment equipment;
 		Okky.KeyBind keybind;
 
 		void Awake() {
-			keybind = GetComponent<KeyBind>();
 			movement = GetComponent<Movement>();
+			equipment = GetComponent<Equipment>();
+			keybind = GetComponent<KeyBind>();
 		}
 
 		void Start() {
@@ -39,6 +41,9 @@ namespace Okky {
 			if (Input.GetKeyUp(keybind.down)) {
 				MoveCancel();
 			}
+			if (Input.GetKeyDown(keybind.A) || Input.GetKeyDown(keybind.B)) {
+				Atack();
+			}
 			MoveUpdate();
 		}
 
@@ -68,6 +73,32 @@ namespace Okky {
 
 		public void OnTakeKoban(GameObject obj) {
 			obj.SendMessage("OnDie", gameObject);
+		}
+
+		void Atack() {
+			var ninja = FindNearestNinja();
+			if (ninja != null) {
+				var p = transform.position;
+				var p2 = ninja.transform.position;
+				var dir = (p2 - p).normalized;
+				equipment.Fire(p, dir);
+			}
+		}
+
+		GameObject FindNearestNinja() {
+			var p = transform.position;
+			var objs = GameObject.FindGameObjectsWithTag("Ninja");
+			GameObject nearest = null;
+			float distance = 0f;
+			foreach (var obj in objs) {
+				var p2 = obj.transform.position;
+				float d = Vector3.Distance(p2, p);
+				if (d < distance || distance == 0) {
+					distance = d;
+					nearest = obj;
+				}
+			}
+			return nearest;
 		}
 	}
 }
