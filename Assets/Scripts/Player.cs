@@ -7,6 +7,10 @@ namespace Okky {
 		Equipment equipment;
 		Okky.KeyBind keybind;
 
+		bool attackCoolDown = false;
+
+		public float attackCoolDownTime;
+
 		void Awake() {
 			movement = GetComponent<Movement>();
 			equipment = GetComponent<Equipment>();
@@ -41,8 +45,13 @@ namespace Okky {
 			if (Input.GetKeyUp(keybind.down)) {
 				MoveCancel();
 			}
+			if (IsAtackCoolDown()) {
+				MoveCancel();
+			}
 			if (Input.GetKeyDown(keybind.A) || Input.GetKeyDown(keybind.B)) {
-				Atack();
+			   if (!IsAtackCoolDown()) {
+					Attack();
+			   }
 			}
 			MoveUpdate();
 		}
@@ -71,18 +80,28 @@ namespace Okky {
 			movement.Move();
 		}
 
-		public void OnTakeKoban(GameObject obj) {
-			obj.SendMessage("OnDie", gameObject);
-		}
-
-		void Atack() {
+		void Attack() {
 			var ninja = FindNearestNinja();
 			if (ninja != null) {
 				var p = transform.position;
 				var p2 = ninja.transform.position;
 				var dir = (p2 - p).normalized;
 				equipment.Fire(p, dir);
+				TurnOnAttackCoolDown();
+				Invoke("TurnOffAttackCoolDown", attackCoolDownTime);
 			}
+		}
+
+		void TurnOnAttackCoolDown() {
+			attackCoolDown = true;
+		}
+
+		void TurnOffAttackCoolDown() {
+			attackCoolDown = false;
+		}
+
+		bool IsAtackCoolDown() {
+			return attackCoolDown;
 		}
 
 		GameObject FindNearestNinja() {
@@ -99,6 +118,18 @@ namespace Okky {
 				}
 			}
 			return nearest;
+		}
+
+		public void OnTakeKoban(GameObject obj) {
+			obj.SendMessage("OnDie", gameObject);
+		}
+
+		public void OnNinja(GameObject obj) {
+			SendMessage("OnDie", obj);
+		}
+
+		void OnDie() {
+			Destroy(gameObject);
 		}
 	}
 }

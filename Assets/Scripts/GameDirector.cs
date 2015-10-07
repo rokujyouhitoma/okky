@@ -70,7 +70,7 @@ namespace Okky {
 		}
 
 		void SendInNinja() {
-			Debug.Log ("SendInNinja");
+
 		}
     }
 }

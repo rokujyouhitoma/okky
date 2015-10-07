@@ -39,5 +39,9 @@ namespace Okky {
 		void Die() {
 			Destroy(gameObject);
 		}
+
+		void OnDie(GameObject ga) {
+			Die();
+		}
 	}
 }
