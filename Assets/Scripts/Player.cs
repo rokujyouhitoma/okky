@@ -134,12 +134,13 @@ namespace Okky {
 		public void OnCube(GameObject obj) {
 			//TODO
 			var p = transform.position;
-			var diff = (p1 - p).normalized * 4; //TODO
+			var diff = (p1 - p).normalized * 5; //TODO
 			p1 = transform.position = new Vector3(p.x + diff.x, p.y + diff.y, p.z);
 		}
 
 		void OnDie() {
-			Destroy(gameObject);
+//			Destroy(gameObject);
+			gameObject.SetActive(false);
 		}
 	}
 }
