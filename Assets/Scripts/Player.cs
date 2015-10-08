@@ -8,6 +8,7 @@ namespace Okky {
 		Okky.KeyBind keybind;
 
 		bool attackCoolDown = false;
+		Vector3 p1;
 
 		public float attackCoolDownTime;
 
@@ -18,6 +19,7 @@ namespace Okky {
 		}
 
 		void Start() {
+			p1 = Vector3.zero;
 		}
 
  		void Update () {
@@ -53,6 +55,7 @@ namespace Okky {
 					Attack();
 			   }
 			}
+			p1 = transform.position;
 			MoveUpdate();
 		}
 
@@ -126,6 +129,13 @@ namespace Okky {
 
 		public void OnNinja(GameObject obj) {
 			SendMessage("OnDie", obj);
+		}
+
+		public void OnCube(GameObject obj) {
+			//TODO
+			var p = transform.position;
+			var diff = (p1 - p).normalized * 4; //TODO
+			p1 = transform.position = new Vector3(p.x + diff.x, p.y + diff.y, p.z);
 		}
 
 		void OnDie() {

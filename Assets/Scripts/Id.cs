@@ -11,5 +11,6 @@ namespace Okky {
 		public const string Koban = "Koban";
 		public const string Kama = "Kama";
 		public const string Shuriken = "Shuriken";
+		public const string Cube = "Cube";
 	}
 }

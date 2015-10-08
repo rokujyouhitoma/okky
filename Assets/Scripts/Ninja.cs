@@ -19,8 +19,8 @@ namespace Okky {
 			movement.Up();
 		}
 
-		void RnadomWalk() {
-			var rand = Random.Range(0, 6);
+		void RandomWalk() {
+//			var rand = Random.Range(0, 6);
 			//TODO
 		}
 

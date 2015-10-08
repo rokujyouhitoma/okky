@@ -11,5 +11,13 @@ namespace Okky {
 			var obj = objects[rand];
 			return obj;
 		}
+
+		public GameObject GenerateById(int id) {
+			if (objects.Length <= id) {
+				return null;
+			}
+			var obj = objects[id];
+			return obj;
+		}
 	}
 }
