@@ -11,6 +11,7 @@ namespace Okky {
 		Vector3 p1;
 
 		public float attackCoolDownTime;
+		public GameObject buddy;
 
 		void Awake() {
 			movement = GetComponent<Movement>();
@@ -54,6 +55,10 @@ namespace Okky {
 			   if (!IsAtackCoolDown()) {
 					Attack();
 			   }
+			}
+			if (IsOutOfBuddyCenter()) {
+				transform.position = p1;
+				MoveCancel();
 			}
 			p1 = transform.position;
 			MoveUpdate();
@@ -121,6 +126,22 @@ namespace Okky {
 				}
 			}
 			return nearest;
+		}
+
+		bool IsOutOfBuddyCenter() {
+			var p = transform.position;
+			var center = GetCenter(buddy.transform.position);
+			var diff = center - p;
+			if (100f <= diff.magnitude) {
+				return true;
+			}
+			return false;
+		}
+
+		Vector3 GetCenter(Vector3 p1) {
+			var p = transform.position;
+			var center = (p + p1) / 2;
+			return center;
 		}
 
 		public void OnTakeKoban(GameObject obj) {
