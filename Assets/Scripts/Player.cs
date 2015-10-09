@@ -6,7 +6,6 @@ namespace Okky {
 		Movement movement;
 		Equipment equipment;
 		Okky.KeyBind keybind;
-		SpriteRenderer spriteRenderer;
 
 		bool attackCoolDown = false;
 		public Vector3 p1;
@@ -16,7 +15,6 @@ namespace Okky {
 		public GameObject buddy;
         
 		void Awake() {
-			spriteRenderer = GetComponent<SpriteRenderer>();
 			movement = GetComponent<Movement>();
 			equipment = GetComponent<Equipment>();
 			keybind = GetComponent<KeyBind>();
@@ -59,12 +57,6 @@ namespace Okky {
 					Attack();
 			   }
 			}
-			if (IsOutsideOfRect()) {
-			}
-            if (IsOutsideOfCamera()) {
-                transform.position = p1;
-				MoveCancel();
-			}
 			p1 = transform.position;
 			MoveUpdate();
 		}
@@ -90,8 +82,52 @@ namespace Okky {
 		}
 
 		void MoveUpdate() {
-			var diff = movement.Move();
-			transform.Translate(diff);
+			var delta = movement.Move();
+			var cameraDelta = Vector3.zero;
+
+			var range = new Rect(0f, 0f, 220f, 200f);
+			var cp = camera.transform.position;
+            var p1 = gameObject.transform.position;
+			var p2 = buddy.transform.position;
+			var p1d = p1 + delta;
+			//right
+			if (cp.x + range.width/2 < p1d.x) {
+				var rx = p2.x + range.width;
+				var deltaXd = Mathf.Min(p1d.x, rx) - p1.x;
+				var p1dx = p1.x + deltaXd; 
+                var cx = p1dx - range.width/2;
+				delta.x = deltaXd;
+				cameraDelta.x = deltaXd;
+ 			}
+ 			//left
+			if (p1d.x < cp.x - range.width/2) {
+				var lx = p2.x - range.width;
+				var deltaXd = Mathf.Max(p1d.x, lx) - p1.x;
+				var p1dx = p1.x + deltaXd; 
+				var cx = p1dx + range.width/2;
+				delta.x = deltaXd;
+				cameraDelta.x = deltaXd;
+            }
+			//up
+			if (cp.y + range.height/2 < p1d.y) {
+				var uy = p2.y + range.height;
+				var deltaYd = Mathf.Min(p1d.y, uy) - p1.y;
+				var p1dy = p1.y + deltaYd;
+				var cy = p1dy - range.height/2;
+				delta.y = deltaYd;
+				cameraDelta.y = deltaYd;
+			}
+			//down
+			if (p1d.y < cp.y - range.height/2) {
+				var dy = p2.y - range.height;
+				var deltaYd = Mathf.Max(p1d.y, dy) - p1.y;
+				var p1dy = p1.y + deltaYd;
+				var cy = p1dy + range.height/2;
+				delta.y = deltaYd;
+				cameraDelta.y = deltaYd;
+            }
+			camera.transform.Translate(cameraDelta);
+			transform.Translate(delta);
         }
 
 		void Attack() {
@@ -132,46 +168,6 @@ namespace Okky {
 				}
 			}
 			return nearest;
-		}
-
-		bool IsOutsideOfCamera() {
-			return !IsInsideOfCamera();
-		}
-
-		bool IsInsideOfCamera() {
-			var p = transform.position;
-			var width = spriteRenderer.bounds.size.x;
-			var height = spriteRenderer.bounds.size.y;
-			var cp = camera.transform.position;
-			var cr = camera.rect;
-			var cameraWidth = cr.width;
-			var cameraHeight = cr.height;
-			if (cp.x + width - cameraWidth/2 <= p.x && p.x <= cp.x - width + cameraWidth/2 &&
-				cp.y + height - cameraHeight/2 <= p.y && p.y <= cp.y - height + cameraHeight/2) {
-				return true;
-			}
-			return false;
-		}
-
-		bool IsOutsideOfRect() {
-			return !IsInsideOfRect();
-		}
-
-		bool IsInsideOfRect() {
-			Rect range = new Rect(0f, 0f, 40f, 40f); //TODO
-            var p = gameObject.transform.position;
-			var cp = camera.transform.position;
-            if (cp.x - range.width/2 <= cp.x && p.x <= cp.x + range.width/2 &&
-			    cp.y - range.height/2 <= p.y && p.y <= cp.y + range.height/2) {
-				return true;
-            }
-            return false;
-		}
-
-		Vector3 GetCenter(Vector3 p1) {
-			var p = transform.position;
-			var center = (p + p1) / 2;
-			return center;
 		}
 
 		public void OnTakeKoban(GameObject obj) {
