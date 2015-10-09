@@ -26,7 +26,7 @@ namespace Okky {
 			var diffX = (vx * dt);
 			var diffY = (vy * dt);
 			var x = p.x + diffX;
-			var y = p.y + diffY;
+    			var y = p.y + diffY;
 			if (x <= LimitXMin) {
 				x = LimitXMin;
 				diffX = x - p.x;

@@ -6,6 +6,7 @@ namespace Okky {
 		Movement movement;
 		Equipment equipment;
 		Okky.KeyBind keybind;
+		SpriteRenderer spriteRenderer;
 
 		bool attackCoolDown = false;
 		public Vector3 p1;
@@ -15,6 +16,7 @@ namespace Okky {
 		public GameObject buddy;
         
 		void Awake() {
+			spriteRenderer = GetComponent<SpriteRenderer>();
 			movement = GetComponent<Movement>();
 			equipment = GetComponent<Equipment>();
 			keybind = GetComponent<KeyBind>();
@@ -85,7 +87,8 @@ namespace Okky {
 			var delta = movement.Move();
 			var cameraDelta = Vector3.zero;
 
-			var range = new Rect(0f, 0f, 220f, 200f);
+			var size = spriteRenderer.bounds.size;
+            var range = new Rect(0f, 0f, 220f, 200f);
 			var cp = camera.transform.position;
             var p1 = gameObject.transform.position;
 			var p2 = buddy.transform.position;
@@ -126,7 +129,20 @@ namespace Okky {
 				delta.y = deltaYd;
 				cameraDelta.y = deltaYd;
             }
-			camera.transform.Translate(cameraDelta);
+
+			//TODO
+			var background = GameObject.Find("/Layer/Background");
+			var sr = background.GetComponent<SpriteRenderer>();
+			//right-left
+			if (sr.bounds.size.x/2 - size.x/2 <= p1.x || p1.x <= -sr.bounds.size.x/2 + size.x/2 ) {
+				delta.x = - delta.x * 5;
+			}
+			//up-down
+			if (sr.bounds.size.y/2 <= p1.y || p1.y <= -sr.bounds.size.y/2 ) {
+				delta.y = - delta.y * 5;
+            } 
+            
+            camera.transform.Translate(cameraDelta);
 			transform.Translate(delta);
         }
 
@@ -170,6 +186,11 @@ namespace Okky {
 			return nearest;
 		}
 
+		void Active() {
+			MoveCancel();
+			gameObject.SetActive(true);
+        }
+
 		public void OnTakeKoban(GameObject obj) {
 			obj.SendMessage("OnDie", gameObject);
 		}
@@ -185,9 +206,21 @@ namespace Okky {
 			p1 = transform.position = new Vector3(p.x + diff.x, p.y + diff.y, p.z);
 		}
 
-		void OnDie() {
+		void OnDie(GameObject obj) {
 //			Destroy(gameObject);
-//			gameObject.SetActive(false);
+			gameObject.SetActive(false);
+			Invoke("Active", 3f);
 		}
+
+		void OnTriggerEnter2D(Collider2D collider) {
+			var ga = collider.gameObject;
+			Id id = ga.GetComponent<Id>();			
+			switch (id.type) {
+			case Id.Shuriken:
+                    gameObject.SendMessage("OnDie", ga);
+                    ga.SendMessage("OnDie", gameObject);
+                    break;
+            }
+        }
 	}
 }

@@ -12,9 +12,11 @@ namespace Okky {
 			switch (id.type) {
 			case Id.Player1:
 			case Id.Player2:
+			case Id.Ninja:
 				ga.SendMessage("OnCube", gameObject);
 				break;
 			case Id.Kama:
+			case Id.Shuriken:
                 ga.SendMessage("OnDie", gameObject);
                 break;
             }
