@@ -16,8 +16,9 @@ namespace Okky {
 
 		void Update() {
 			SetupMovement();
-			var distance = movement.Move ();
-			flight += distance.magnitude;
+			var diff = movement.Move ();
+			transform.Translate(diff);
+			flight += diff.magnitude;
 			if (IsOutOfRange()) {
 				Die();
 			}

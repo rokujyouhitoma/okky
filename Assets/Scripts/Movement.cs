@@ -35,7 +35,6 @@ namespace Okky {
 				x = LimitXMax;
 				diffX = x - p.x;
 			}
-			transform.position = new Vector3(x, y, p.z);
 			return new Vector3(diffX, diffY, 0);
 		}
 
