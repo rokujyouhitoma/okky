@@ -321,6 +321,23 @@ namespace Okky {
 			}
 		}
 
+		public float GetPlayerLives(int playerId) {
+			float lives = 0f;
+			switch(playerId) {
+			case 1:
+				lives = player1Lives;
+				break;
+			case 2:
+				lives = player1Lives;
+				break;
+			}
+			return lives;
+		}
+
+		public float GetPlayer2Lives() {
+			return player2Lives;
+		}
+
 		void SetupMapChip(int[][] mapchip, GameObject parent) {
 			var layerTransform = layer.GetComponent<RectTransform>();
 			float viewWidth = layerTransform.rect.width;
