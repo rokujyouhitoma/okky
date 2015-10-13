@@ -93,6 +93,7 @@ namespace Okky {
             var p1 = gameObject.transform.position;
 			var p2 = buddy.transform.position;
 			var p1d = p1 + delta;
+
 			//right
 			if (cp.x + range.width/2 < p1d.x) {
 				var rx = p2.x + range.width;
@@ -133,15 +134,19 @@ namespace Okky {
 			//TODO
 			var background = GameObject.Find("/Layer/Background");
 			var sr = background.GetComponent<SpriteRenderer>();
-			//right-left
-			if (sr.bounds.size.x/2 - size.x/2 <= p1.x || p1.x <= -sr.bounds.size.x/2 + size.x/2 ) {
-				delta.x = - delta.x * 5;
+			//right
+			if (sr.bounds.size.x/2 - size.x/2 <= p1.x) {
+				delta.x = delta.x * -1 * 5;
+			}
+			//left
+			if (p1.x <= -sr.bounds.size.x/2 + size.x/2 ) {
+				delta.x = delta.x * -1 * 5;
 			}
 			//up-down
 			if (sr.bounds.size.y/2 <= p1.y || p1.y <= -sr.bounds.size.y/2 ) {
-				delta.y = - delta.y * 5;
-            } 
-            
+				delta.y = delta.y * -1 * 5;
+			} 
+ 
             camera.transform.Translate(cameraDelta);
 			transform.Translate(delta);
         }
