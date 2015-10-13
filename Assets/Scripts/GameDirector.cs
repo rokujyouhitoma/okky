@@ -321,21 +321,32 @@ namespace Okky {
 			}
 		}
 
-		public float GetPlayerLives(int playerId) {
+		public float GetPlayerLife(int playerId) {
 			float lives = 0f;
 			switch(playerId) {
 			case 1:
 				lives = player1Lives;
 				break;
 			case 2:
-				lives = player1Lives;
+				lives = player2Lives;
 				break;
 			}
 			return lives;
 		}
 
-		public float GetPlayer2Lives() {
-			return player2Lives;
+		public void DamageLife(int playerId, float amount) {
+			switch(playerId) {
+			case 1:
+				if (0f < player1Lives) {
+					player1Lives = Mathf.Max(0f, player1Lives - amount);
+				}
+				break;
+			case 2:
+				if (0f < player2Lives) {
+					player2Lives = Mathf.Max(0f, player2Lives - amount);
+				}
+				break;
+			}
 		}
 
 		void SetupMapChip(int[][] mapchip, GameObject parent) {

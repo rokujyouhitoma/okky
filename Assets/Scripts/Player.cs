@@ -14,7 +14,10 @@ namespace Okky {
 		public Camera camera;
 		public float attackCoolDownTime;
 		public GameObject buddy;
-        
+		public GameDirector gameDirector;
+
+		public int playerId;
+
 		void Awake() {
 			spriteRenderer = GetComponent<SpriteRenderer>();
 			movement = GetComponent<Movement>();
@@ -212,9 +215,14 @@ namespace Okky {
 		}
 
 		void OnDie(GameObject obj) {
+			GameDirector gd = gameDirector.GetComponent<GameDirector>();
+			gd.DamageLife(playerId, 1);
+			var life = gd.GetPlayerLife(playerId);
+			if (0 < life) {
+				Invoke("Active", 3f);
+			}
 //			Destroy(gameObject);
 			gameObject.SetActive(false);
-			Invoke("Active", 3f);
 		}
 
 		void OnTriggerEnter2D(Collider2D collider) {

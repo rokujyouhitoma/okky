@@ -10,12 +10,12 @@ namespace Okky {
 		Text textUI;
 
 		void Start () {
-			gameDirector = gameDirector.GetComponent<GameDirector>();
 			textUI = GetComponent<Text>();
 		}
 		
 		void Update () {
-			textUI.text = gameDirector.GetPlayerLives(playerId).ToString() ;
+			var gd = gameDirector.GetComponent<GameDirector>();
+			textUI.text = gd.GetPlayerLife(playerId).ToString() ;
 		}
 	}
 }
