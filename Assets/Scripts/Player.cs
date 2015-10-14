@@ -12,11 +12,14 @@ namespace Okky {
 		public Vector3 p1;
 
 		public Camera camera;
-		public float attackCoolDownTime;
 		public GameObject buddy;
 		public GameDirector gameDirector;
 
+		public float attackCoolDownTime;
+		public float bambooSpearTime;
+
 		public int playerId;
+		bool bambooSpear = false;
 
 		void Awake() {
 			spriteRenderer = GetComponent<SpriteRenderer>();
@@ -58,9 +61,7 @@ namespace Okky {
 				MoveCancel();
 			}
 			if (Input.GetKeyDown(keybind.A) || Input.GetKeyDown(keybind.B)) {
-			   if (!IsAtackCoolDown()) {
-					Attack();
-			   }
+				Attack();
 			}
 			p1 = transform.position;
 			MoveUpdate();
@@ -155,6 +156,15 @@ namespace Okky {
         }
 
 		void Attack() {
+			if (bambooSpear) {
+				var p = transform.position;
+				var dir = new Vector3(0, 1);
+				equipment.Fire(p, dir);
+				return;
+			}
+			if (IsAtackCoolDown()) {
+				return;
+			}
 			var ninja = FindNearestNinja();
 			if (ninja != null) {
 				var p = transform.position;
@@ -176,6 +186,10 @@ namespace Okky {
 
 		bool IsAtackCoolDown() {
 			return attackCoolDown;
+		}
+
+		void TurnOffBambooSpear() {
+			bambooSpear = false;
 		}
 
 		GameObject FindNearestNinja() {
@@ -200,6 +214,13 @@ namespace Okky {
         }
 
 		public void OnTakeKoban(GameObject obj) {
+			obj.SendMessage("OnDie", gameObject);
+		}
+
+		public void OnTakeBamboo(GameObject obj) {
+			Debug.Log ("OnTakeBamboo");
+			bambooSpear = true;
+			Invoke("TurnOffBambooSpear", bambooSpearTime);
 			obj.SendMessage("OnDie", gameObject);
 		}
 
