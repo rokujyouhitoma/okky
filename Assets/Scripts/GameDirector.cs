@@ -242,7 +242,7 @@ namespace Okky {
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
-			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
+			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
@@ -295,8 +295,13 @@ namespace Okky {
 		GameObject layer;
 		GameObject ground;
 
-		public float player1Lives;
-		public float player2Lives;
+		public float player1Life;
+		public float player2Life;
+
+		enum ID {
+			Player1 = 1,
+			Player2 = 2,
+		}
 
 		void Awake() {
 			camera = GameObject.Find("/Camera");
@@ -319,31 +324,50 @@ namespace Okky {
 			if (!ExistNinja()) {
 				SendInNinja();
 			}
+			if (IsLifeZeroByPlayerId((int)ID.Player1) && IsLifeZeroByPlayerId((int)ID.Player2)) {
+				ResetGame();
+			}
 		}
 
 		public float GetPlayerLife(int playerId) {
 			float lives = 0f;
 			switch(playerId) {
-			case 1:
-				lives = player1Lives;
+			case (int)ID.Player1:
+				lives = player1Life;
 				break;
-			case 2:
-				lives = player2Lives;
+			case (int)ID.Player2:
+				lives = player2Life;
 				break;
 			}
 			return lives;
 		}
 
-		public void DamageLife(int playerId, float amount) {
+		bool IsLifeZeroByPlayerId(int playerId) {
 			switch(playerId) {
-			case 1:
-				if (0f < player1Lives) {
-					player1Lives = Mathf.Max(0f, player1Lives - amount);
+			case (int)ID.Player1: 
+				if (player1Life <= 0) {
+					return true;
 				}
 				break;
-			case 2:
-				if (0f < player2Lives) {
-					player2Lives = Mathf.Max(0f, player2Lives - amount);
+			case (int)ID.Player2:
+				if (player2Life <= 0) {
+					return true;
+				}
+				break;
+			}
+			return false;
+		}
+
+		public void DamageLife(int playerId, float amount) {
+			switch(playerId) {
+			case (int)ID.Player1:
+				if (0f < player1Life) {
+					player1Life = Mathf.Max(0f, player1Life - amount);
+				}
+				break;
+			case (int)ID.Player2:
+				if (0f < player2Life) {
+					player2Life = Mathf.Max(0f, player2Life - amount);
 				}
 				break;
 			}
@@ -353,8 +377,8 @@ namespace Okky {
 			var layerTransform = layer.GetComponent<RectTransform>();
 			float viewWidth = layerTransform.rect.width;
 			float viewHeight = layerTransform.rect.height;
-			float chipWidth = 8f;
-			float chipHeight = 8f;
+			float chipWidth = 8f; //TODO
+			float chipHeight = 8f; //TODO
 			int y = 0;
 			int x = 0;
 			for(y = 0 ; y < mapchip.Length; ++y) {
@@ -375,6 +399,7 @@ namespace Okky {
 		}
 
 		void ResetGame() {
+			Debug.Log ("ResetGame");
 			Application.LoadLevel("GameMain");
 		}
 
