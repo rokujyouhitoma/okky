@@ -19,7 +19,9 @@ namespace Okky {
 		public float bambooSpearTime;
 
 		public int playerId;
-		bool bambooSpear = false;
+
+		GameObject bambooSpear;
+		bool bambooSpearFlag = false;
 
 		void Awake() {
 			spriteRenderer = GetComponent<SpriteRenderer>();
@@ -156,10 +158,7 @@ namespace Okky {
         }
 
 		void Attack() {
-			if (bambooSpear) {
-				var p = transform.position;
-				var dir = new Vector3(0, 1);
-				equipment.Fire(p, dir);
+			if (bambooSpearFlag) {
 				return;
 			}
 			if (IsAtackCoolDown()) {
@@ -170,8 +169,11 @@ namespace Okky {
 				var p = transform.position;
 				var p2 = ninja.transform.position;
 				var dir = (p2 - p).normalized;
-				equipment.Fire(p, dir);
-				TurnOnAttackCoolDown();
+				var weapon = equipment.Fire(0, p);
+				var projectile = weapon.GetComponent<Projectile>();
+				projectile.dir = dir;
+                
+                TurnOnAttackCoolDown();
 				Invoke("TurnOffAttackCoolDown", attackCoolDownTime);
 			}
 		}
@@ -189,7 +191,8 @@ namespace Okky {
 		}
 
 		void TurnOffBambooSpear() {
-			bambooSpear = false;
+			bambooSpear.SendMessage("OnDie", gameObject);
+			bambooSpearFlag = false;
 		}
 
 		GameObject FindNearestNinja() {
@@ -219,7 +222,12 @@ namespace Okky {
 
 		public void OnTakeBamboo(GameObject obj) {
 			Debug.Log ("OnTakeBamboo");
-			bambooSpear = true;
+			var p = transform.position;
+			var dir = new Vector3(0, 1);
+			var weapon = equipment.Fire(1, p);
+			weapon.GetComponent<BambooSpear>().parent = gameObject;
+			bambooSpear = weapon;
+			bambooSpearFlag = true;
 			Invoke("TurnOffBambooSpear", bambooSpearTime);
 			obj.SendMessage("OnDie", gameObject);
 		}
@@ -243,6 +251,9 @@ namespace Okky {
 				Invoke("Active", 3f);
 			}
 //			Destroy(gameObject);
+			if (bambooSpearFlag) {
+				bambooSpear.SendMessage("OnDie");
+			}
 			gameObject.SetActive(false);
 		}
 
@@ -251,9 +262,9 @@ namespace Okky {
 			Id id = ga.GetComponent<Id>();			
 			switch (id.type) {
 			case Id.Shuriken:
-                    gameObject.SendMessage("OnDie", ga);
-                    ga.SendMessage("OnDie", gameObject);
-                    break;
+                gameObject.SendMessage("OnDie", ga);
+                ga.SendMessage("OnDie", gameObject);
+                break;
             }
         }
 	}

@@ -105,7 +105,9 @@ namespace Okky {
 				var p = transform.position;
 				var p2 = player.transform.position;
 				var dir = (p2 - p).normalized;
-				equipment.Fire(p, dir);
+				var weapon = equipment.Fire(0, p);
+				var projectile = weapon.GetComponent<Projectile>();
+				projectile.dir = dir;
 			}
 		}
 
@@ -138,6 +140,9 @@ namespace Okky {
 			case Id.Kama:
 				gameObject.SendMessage("OnDie", ga);
 				ga.SendMessage("OnDie", gameObject);
+				break;
+			case Id.BambooSpear:
+				gameObject.SendMessage("OnDie", ga);
 				break;
 			}
 		}
