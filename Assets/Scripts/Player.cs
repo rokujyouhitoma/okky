@@ -11,7 +11,7 @@ namespace Okky {
 		bool attackCoolDown = false;
 		public Vector3 p1;
 
-		public Camera camera;
+		public Camera mainCamera;
 		public GameObject buddy;
 		public GameDirector gameDirector;
 
@@ -95,7 +95,7 @@ namespace Okky {
 
 			var size = spriteRenderer.bounds.size;
             var range = new Rect(0f, 0f, 220f, 200f);
-			var cp = camera.transform.position;
+			var cp = mainCamera.transform.position;
             var p1 = gameObject.transform.position;
 			var p2 = buddy.transform.position;
 			var p1d = p1 + delta;
@@ -137,23 +137,26 @@ namespace Okky {
 				cameraDelta.y = deltaYd;
             }
 
-			//TODO
+			//TODO: Maybe there are bug..
 			var background = GameObject.Find("/Layer/Background");
 			var sr = background.GetComponent<SpriteRenderer>();
 			//right
-			if (sr.bounds.size.x/2 - size.x/2 <= p1.x) {
-				delta.x = delta.x * -1 * 5;
+			if (sr.bounds.size.x/2 <= p1.x + size.x/2) {
+				delta.x = p1.x - sr.bounds.size.x/2 - size.x/2;  //TODO: Maybe It is bug..
 			}
-			//left
-			if (p1.x <= -sr.bounds.size.x/2 + size.x/2 ) {
-				delta.x = delta.x * -1 * 5;
+			//left 
+			if (p1.x - size.x/2 <= - sr.bounds.size.x/2) {
+				delta.x = - sr.bounds.size.x/2 - p1.x + size.x/2 + 1;  //TODO: Maybe It is bug too..
 			}
-			//up-down
-			if (sr.bounds.size.y/2 <= p1.y || p1.y <= -sr.bounds.size.y/2 ) {
-				delta.y = delta.y * -1 * 5;
-			} 
- 
-            camera.transform.Translate(cameraDelta);
+			//up
+			if (sr.bounds.size.y/2 <= p1.y) {
+				delta.y = p1.x - sr.bounds.size.x/2;  //TODO: Maybe It is bug too.. 
+			}
+			//down
+			if (p1.y <= -sr.bounds.size.y/2) {
+				delta.y = delta.y * -1 * 5;  //TODO: Maybe It is bug too..
+			}
+			mainCamera.transform.Translate(cameraDelta);
 			transform.Translate(delta);
         }
 

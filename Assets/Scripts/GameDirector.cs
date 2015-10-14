@@ -194,7 +194,7 @@ namespace Okky {
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 		};
 
-		int[][] mapchipGameObject = new int[][] {
+		int[][] mapchipItemAndNinja = new int[][] {
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
@@ -242,7 +242,7 @@ namespace Okky {
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
-			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
+			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
@@ -287,30 +287,31 @@ namespace Okky {
 			new int[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, },
 		};
 
-		public GameObject NinjaPrefab;
-
 		Generator generator;
 
-		GameObject camera;
+		GameObject mainCamera;
 		GameObject layer;
 		GameObject ground;
 
 		public float player1Life;
 		public float player2Life;
 
-		enum ID {
+		public float NinjaWeight;
+		public float RedNinjaWeight;
+
+		enum PlayerID {
 			Player1 = 1,
 			Player2 = 2,
 		}
 
 		void Awake() {
-			camera = GameObject.Find("/Camera");
+			mainCamera = GameObject.Find("/Camera");
 			layer = GameObject.Find("/Layer");
 			ground = GameObject.Find("/Layer/Background");
 			generator = GetComponent<Generator>();
 			SetupMapChip(mapchipBackground, ground);
 			SetupMapChip(mapchipBlocks, layer);
-			SetupMapChip(mapchipGameObject, layer);
+			SetupMapChip(mapchipItemAndNinja, layer);
 			InvokeRepeating("SendInNinja", 2f, 2f);
 		}
 
@@ -324,7 +325,7 @@ namespace Okky {
 			if (!ExistNinja()) {
 				SendInNinja();
 			}
-			if (IsLifeZeroByPlayerId((int)ID.Player1) && IsLifeZeroByPlayerId((int)ID.Player2)) {
+			if (IsLifeZeroByPlayerId((int)PlayerID.Player1) && IsLifeZeroByPlayerId((int)PlayerID.Player2)) {
 				ResetGame();
 			}
 		}
@@ -332,10 +333,10 @@ namespace Okky {
 		public float GetPlayerLife(int playerId) {
 			float lives = 0f;
 			switch(playerId) {
-			case (int)ID.Player1:
+			case (int)PlayerID.Player1:
 				lives = player1Life;
 				break;
-			case (int)ID.Player2:
+			case (int)PlayerID.Player2:
 				lives = player2Life;
 				break;
 			}
@@ -344,12 +345,12 @@ namespace Okky {
 
 		bool IsLifeZeroByPlayerId(int playerId) {
 			switch(playerId) {
-			case (int)ID.Player1: 
+			case (int)PlayerID.Player1: 
 				if (player1Life <= 0) {
 					return true;
 				}
 				break;
-			case (int)ID.Player2:
+			case (int)PlayerID.Player2:
 				if (player2Life <= 0) {
 					return true;
 				}
@@ -360,12 +361,12 @@ namespace Okky {
 
 		public void DamageLife(int playerId, float amount) {
 			switch(playerId) {
-			case (int)ID.Player1:
+			case (int)PlayerID.Player1:
 				if (0f < player1Life) {
 					player1Life = Mathf.Max(0f, player1Life - amount);
 				}
 				break;
-			case (int)ID.Player2:
+			case (int)PlayerID.Player2:
 				if (0f < player2Life) {
 					player2Life = Mathf.Max(0f, player2Life - amount);
 				}
@@ -446,10 +447,35 @@ namespace Okky {
 			ResetGame();
 		}
 
+		Vector3 GetNinjaSpawnDeltaPosition() {
+			var cp = mainCamera.transform.position;
+			var cameraHeight = mainCamera.GetComponent<Camera>().rect.height;
+			var cameraWidth = mainCamera.GetComponent<Camera>().rect.width;
+			var x = Random.Range (cp.x - cameraWidth/2, cp.x + cameraWidth/2);
+			var y = Random.Range (cp.y + cameraHeight/2 /2, cp.y + cameraHeight/2);
+			var delta = new Vector3(x, y, 0);
+			return delta;
+		}
+
+		int GetNinjaType() {
+			var sum = NinjaWeight + RedNinjaWeight;
+			var rand = Random.Range(0, sum);
+			var typeId = (0 <= rand && rand < NinjaWeight) ? 7 : 8; //TODO: should be refator...
+			return typeId;
+		}
+
+		GameObject GetNinjaPrefab() {
+			var typeId = GetNinjaType();
+			var prefab = generator.GenerateById(typeId);
+			return prefab;
+		}
+
 		void SendInNinja() {
-			var cp = camera.transform.position;
-			var ninja = (GameObject)Instantiate(NinjaPrefab, Vector3.zero, Quaternion.identity);
+			var prefab = GetNinjaPrefab();
+			var delta = GetNinjaSpawnDeltaPosition();
+			var ninja = (GameObject)Instantiate(prefab, Vector3.zero, Quaternion.identity);
 			ninja.transform.parent = layer.transform;
+			ninja.transform.Translate(delta);
 		}
     }
 }
