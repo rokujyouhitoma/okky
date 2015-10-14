@@ -8,17 +8,19 @@ namespace Okky {
 		Okky.KeyBind keybind;
 		SpriteRenderer spriteRenderer;
 
-		bool attackCoolDown = false;
+
 		public Vector3 p1;
 
 		public Camera mainCamera;
 		public GameObject buddy;
 		public GameDirector gameDirector;
 
-		public float attackCoolDownTime;
 		public float bambooSpearTime;
 
 		public int playerId;
+
+		public float attackCoolDownTime;
+		bool attackCoolDown = false;
 
 		GameObject bambooSpear;
 		bool bambooSpearFlag = false;
@@ -175,7 +177,6 @@ namespace Okky {
 				var weapon = equipment.Fire(0, p);
 				var projectile = weapon.GetComponent<Projectile>();
 				projectile.dir = dir;
-                
                 TurnOnAttackCoolDown();
 				Invoke("TurnOffAttackCoolDown", attackCoolDownTime);
 			}
