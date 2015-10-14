@@ -51,7 +51,7 @@ namespace Okky {
 
 		void RandomDir() {
 			var randX = Random.Range(-100 , 100) / 100f;
-			var randY = Random.Range(-100, 0) / 100f;
+			var randY = Random.Range(-100, 50) / 100f;
 			dir = (new Vector3(randX, randY, 0)).normalized;
 		}
 

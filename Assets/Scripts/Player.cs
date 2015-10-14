@@ -152,11 +152,11 @@ namespace Okky {
 			}
 			//up
 			if (sr.bounds.size.y/2 <= p1.y) {
-				delta.y = p1.x - sr.bounds.size.x/2;  //TODO: Maybe It is bug too.. 
+				delta.y = p1.y - sr.bounds.size.y/2 - size.y/4;  //TODO: Maybe It is bug too.. 
 			}
 			//down
 			if (p1.y <= -sr.bounds.size.y/2) {
-				delta.y = delta.y * -1 * 5;  //TODO: Maybe It is bug too..
+				delta.y = - sr.bounds.size.y/2 - p1.y + size.x/4;  //TODO: Maybe It is bug too..
 			}
 			mainCamera.transform.Translate(cameraDelta);
 			transform.Translate(delta);
@@ -195,7 +195,9 @@ namespace Okky {
 		}
 
 		void TurnOffBambooSpear() {
-			bambooSpear.SendMessage("OnDie", gameObject);
+			if (bambooSpearFlag) {
+				bambooSpear.SendMessage("OnDie", gameObject);
+			}
 			bambooSpearFlag = false;
 		}
 
@@ -254,10 +256,7 @@ namespace Okky {
 			if (0 < life) {
 				Invoke("Active", 3f);
 			}
-//			Destroy(gameObject);
-			if (bambooSpearFlag) {
-				bambooSpear.SendMessage("OnDie");
-			}
+			TurnOffBambooSpear();
 			gameObject.SetActive(false);
 		}
 
